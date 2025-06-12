@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick and morty and Harry poter</title>
+</head>
+<body>
+    <style>
+        * {
+            box-sizing: border-box; 
+        }
+        :root {
+            --primary-color: #1b1f2b;        
+            --secondary-color: #e0c097;    
+            --terceary-color: #5d4e60;     
+            --color-cuarto: #f4f4f4;       
+            --color-quinto: #ffffff;        
+        }
+        body {
+            background-color: var(--primary-color);
+            font-family: italic;
+            font-style: italic;
+            margin: 0;
+        }
+        header {
+            padding: 16px;
+            display: flex;
+            justify-content: flex-end;
+            background-color: var(--terceary-color);
+        }
+        .search {
+            background-color: rgba(9, 255, 0, 0.713);
+            border: 5px solid var(--primary-color);
+            border-radius: 50px;
+            font-family: italic;
+            font-style: italic;
+            font-size: 15px;
+            padding: 10px 16px;
+            color: var(--terceary-color);
+        }
+        .search::placeholder {
+            color: var(--terceary-color);
+        }
+        .search:focus {
+            outline: none;
+            background-color: var(--primary-color);
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .personaje {
+            width: 300px;
+            margin: 15px;
+            background-color: var(--secondary-color);
+            box-shadow: 0 5px 5px black;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .personaje img {
+            width: 100%;
+            object-fit: contain;
+        }
+        .personaje-info {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 8px 15px 15px;
+            letter-spacing: 5px;
+        }
+        .personaje-info h1 {
+            color: var(--color-quinto);
+            margin-top: 0;
+        }
+        .personaje-info h3 {
+            color: var(--color-cuarto);
+            margin-top: 0;
+        }
+        .personaje-info span {
+            background-color: var(--primary-color);
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .descripcion {
+            background-color: white;
+            padding: 32px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            max-height: 100%;
+            transform: translateY(101%);
+            overflow-y: auto;
+            transition: transform 1s ease-in;
+        }
+        .personaje:hover .descripcion {
+            transform: translateY(0);
+        }
+        td {
+            padding: 10px;
+        }
+        tr {
+            box-shadow: rgba(0, 0, 0, 0.4) 1px 1px;
+        }
+    </style>
+
+    <header>
+        <img src="rick.jpg" alt="logo" style="width: auto" height="50px">
+        <form id="form">
+            <input type="text" id="search" class="search" placeholder="Busca en la API">
+        </form>
+    </header>
+    <main id="main"></main>
+
+    <script>
+        const API_HP = 'https://hp-api.onrender.com/api/characters';
+        const API_RICK = 'https://rickandmortyapi.com/api/character';
+        const main = document.getElementById('main');
+        const form = document.getElementById('form');
+        const search = document.getElementById('search');
+
+        getAllCharacters();
+        async function getAllCharacters() {
+            const [rmRes, hpRes] = await Promise.all([
+                fetch(API_RICK).then(res => res.json()),
+                fetch(API_HP).then(res => res.json()),
+            ]);
+            const rickChars = rmRes.results || [];
+            const hpChars = hpRes || [];
+
+            showCharacters([...rickChars, ...hpChars]);
+        }
+
+        function showCharacters(characters){
+            main.innerHTML = '';
+
+            characters.forEach((char) => {
+                const charElement = document.createElement('div');
+                charElement.classList.add('personaje');
+                if ('wand' in char) {
+                    const {
+                        id, name, alternate_names, species, gender, house, dateOfBirth, wizard, ancestry, eyeColour,
+                        hairColour, wand = {}, patronus, hogwartsStudent, hogwartsStaff, actor, alive, image
+                    } = char;
+
+                    const { wood = '', core = '', length = '' } = wand;
+
+                    charElement.innerHTML = `
+                        <div>
+                            <h1>${name}</h1>
+                        </div>
+                        <br>
+                        <img src="${image}" alt="${name}">
+                        <div class="descripcion">
+                            <table>
+                                <tbody>
+                                    <tr><td>Alternate Names</td><td>${alternate_names}</td></tr>
+                                    <tr><td>Especie</td><td>${species}</td></tr>
+                                    <tr><td>Genero</td><td>${gender}</td></tr>
+                                    <tr><td>Casa</td><td>${house}</td></tr>
+                                    <tr><td>Fecha de Nacimiento</td><td>${dateOfBirth}</td></tr>
+                                    <tr><td>Mago</td><td>${wizard}</td></tr>
+                                    <tr><td>Ascendencia</td><td>${ancestry}</td></tr>
+                                    <tr><td>Color de Ojos</td><td>${eyeColour}</td></tr>
+                                    <tr><td>Color de Cabello</td><td>${hairColour}</td></tr>
+                                    <tr>
+                                        <td>Varita Mágica</td>
+                                        <td>
+                                            <ul>
+                                                <li>Madera: ${wood}</li>
+                                                <li>Núcleo: ${core}</li>
+                                                <li>Longitud: ${length}</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr><td>Patrona</td><td>${patronus}</td></tr>
+                                    <tr><td>Estudiante de Hogwarts</td><td>${hogwartsStudent}</td></tr>
+                                    <tr><td>Personal de Hogwarts</td><td>${hogwartsStaff}</td></tr>
+                                    <tr><td>Actor</td><td>${actor}</td></tr>
+                                    <tr><td>Alive</td><td>${alive}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                } else {
+                    const { id, name, status, species, gender, origin, location, image } = char;
+                    charElement.innerHTML = `
+                        <div>
+                            <h1>${name}</h1>
+                        </div>
+                        <br>
+                        <img src="${image}" alt="${name}">
+                        <div class="descripcion">
+                            <table>
+                                <tbody>
+                                    <tr><td>Status</td><td>${status}</td></tr>
+                                    <tr><td>Especie</td><td>${species}</td></tr>
+                                    <tr><td>Genero</td><td>${gender}</td></tr>
+                                    <tr><td>Origen</td><td>${origin.name}</td></tr>
+                                    <tr><td>Ubicación</td><td>${location.name}</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                main.appendChild(charElement);
+            });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchTerm = search.value.toLowerCase();
+            if (searchTerm && searchTerm !== '') {
+                getAllCharacters(API_HP + `?name=${searchTerm}`);
+                search.value = '';
+            } else {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

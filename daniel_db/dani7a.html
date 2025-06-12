@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peliculas API</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --terceary-color: #ECF0F1;
+        }
+        body {
+            background-color: var(--primary-color);
+            font-family: italic;
+            margin: 0;
+        }
+        header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--terceary-color);
+        }
+        .search {
+            background-color: white;
+            border: 5px solid var(--terceary-color);
+            border-radius: 50px;
+            font-size: 15px;
+            padding: 10px 16px;
+            color: var(--primary-color);
+        }
+        .search::placeholder {
+            color: var(--terceary-color);
+        }
+        .search:focus {
+            outline: none;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .movie {
+            width: 300px;
+            margin: 15px;
+            background-color: var(--secondary-color);
+            box-shadow: 0 5px 5px black;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .movie img {
+            width: 100%;
+        }
+        .movie-info {
+            color: var(--terceary-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 8px 15px 15px;
+            letter-spacing: 1px;
+        }
+        .movie-info span {
+            background-color: var(--primary-color);
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .movie-info span.blue {
+            color: blue;
+        }
+        .movie-info span.orange {
+            color: orange;
+        }
+        .movie-info span.red {
+            color: red;
+        }
+        .overview {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transform: translateY(101%);
+            transition: transform 0.3s ease-in;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+        .movie:hover .overview {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.jpg" alt="logo" style="width: auto" height="50px">
+    <form id="form">
+        <input type="text" id="search" class="search" placeholder="Busca tu película">
+    </form>
+</header>
+
+<main id="main"></main>
+
+<script>
+    const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=3fd2be6f0c70a2a598f084ddfb75487c&page=1';
+    const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
+    const SEARCH_API = 'https://api.themoviedb.org/3/search/movie?api_key=3fd2be6f0c70a2a598f084ddfb75487c&query=';
+
+    const main = document.getElementById('main');
+    const form = document.getElementById('form');
+    const search = document.getElementById('search');
+
+    getMovies(API_URL);
+
+    async function getMovies(url) {
+        const res = await fetch(url);
+        const data = await res.json();
+        showMovies(data.results);
+    }
+
+    function showMovies(movies) {
+        main.innerHTML = '';
+
+        movies.forEach((movie) => {
+            const { title, poster_path, vote_average, overview } = movie;
+
+            const movieEl = document.createElement('div');
+            movieEl.classList.add('movie');
+
+            movieEl.innerHTML = `
+                <img src="${IMG_PATH + poster_path}" alt="${title}">
+                <div class="movie-info">
+                    <h3>${title}</h3>
+                    <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+                </div>
+                <div class="overview">
+                    <h3>Overview</h3>
+                    <p>${overview}</p>
+                </div>
+            `;
+
+            main.appendChild(movieEl);
+        });
+    }
+
+    function getClassByRate(vote) {
+        if (vote >= 8) {
+            return 'blue';
+        } else if (vote >= 5) {
+            return 'orange';
+        } else {
+            return 'red';
+        }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = search.value.trim();
+
+        if (searchTerm !== '') {
+            getMovies(SEARCH_API + searchTerm);
+            search.value = '';
+        } else {
+            window.location.reload();
+        }
+    });
+</script>
+
+</body>
+</html>
