@@ -1,0 +1,87 @@
+.contenedor {
+    display: flex;
+    justify-content: center;
+}
+
+.container1 {
+    width: auto;
+    background-color: rgba(25, 25, 25, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #FFE81F;
+    box-shadow: 0 0 15px rgba(255, 232, 31, 0.3);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    font-size: 14px;
+    padding: 10px;
+    color: #FFE81F;
+    font-weight: bold;
+    text-align: right;
+    width: 130px;
+}
+
+.form-group input,
+.form-group select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #FFD700;
+    border-radius: 5px;
+    background-color: #111;
+    color: #FFE81F;
+}
+
+input[type="submit"] {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #FFE81F;
+    border: none;
+    color: #000;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: block;
+    margin: 20px auto 10px;
+    font-weight: bold;
+}
+
+input[type="submit"]:hover {
+    background-color: #FFD700;
+    box-shadow: 0 0 10px #FFE81F;
+}
+
+/* TABLAS */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255,232,31,0.2);
+    background-color: #1a1a1a;
+    color: #FFE81F;
+}
+
+th {
+    background: linear-gradient(to right, #222, #111);
+    color: #FFD700;
+    text-align: center;
+}
+
+td {
+    border-bottom: 1px solid #333;
+}
+
+tr:nth-child(even) {
+    background-color: #2b2b2b;
+}
+
+tr:nth-child(odd) {
+    background-color: #1e1e1e;
+}

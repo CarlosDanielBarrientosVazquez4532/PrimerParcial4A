@@ -1,0 +1,77 @@
+@import url('https://fonts.cdnfonts.com/css/saddlebag');
+@import url('https://fonts.cdnfonts.com/css/oxanium');
+@import url('https://fonts.cdnfonts.com/css/roboto-mono');
+@import url('https://fonts.cdnfonts.com/css/vtks-embroidery');
+@import url('https://fonts.cdnfonts.com/css/clutsy');
+@import url('https://fonts.cdnfonts.com/css/burnid');
+
+body {
+    background: radial-gradient(ellipse at center, #000000 0%, #0a0a0a 100%);
+    color: #ffe91f9a;
+    margin: 20px;
+    font-family: 'Oxanium', sans-serif;
+}
+
+h1 {
+    font-family: 'BURNID', sans-serif;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-family: 'Saddlebag', sans-serif;
+    color: #FFE81F;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #CCCCCC;
+    text-align: center;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.jumbotron {
+    background: linear-gradient(#202012, #3d3210);
+}
+
+a, h5, label, th {
+    font-family: 'Oxanium', sans-serif;
+    color: #FFD700;
+}
+
+td, input, select {
+    font-family: 'Roboto Mono', monospace;
+    color: #FFE81F;
+}
+
+.navbarBg {
+    background: linear-gradient(to right, #1a1a1a, #3a3a3a, #1a1a1a);
+    border-bottom: 2px solid #FFE81F;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #3e2c1c !important;
+}
+
+.dropdown-menu {
+    background-color: #222;
+    color: #FFE81F;
+    border: 1px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255, 232, 31, 0.4);
+}
+
+.dropdown-menu > a {
+    color: #FFE81F;
+    padding: 10px 20px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu > a:hover {
+    background-color: #333;
+    color: #FFD700;
+}

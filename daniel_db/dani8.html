@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Ball Z API</title>
+    <style>
+        :root {
+            --color-primario: #F57C00;  
+            --color-secundario: #1976D2; 
+            --color-terciario: #FFEB3B;  
+            --color-cuartario: #D32F2F;  
+            --color-quintario: #212121;  
+        }
+        * {
+            box-sizing: border-box;
+        }
+        header {
+            padding: 16px;
+            display: flex;
+            justify-content: flex-end;
+            background-color: var(--color-cuartario);
+        }
+        body {
+            background-color: var(--color-primario);
+            font-family: italic;
+            margin: 0;
+        }
+        .search {
+            background-color: white;
+            border: 5px solid var(--color-terciario);
+            border-radius: 50px;
+            font-family: italic;
+            font-size: 15px;
+            padding: 10px 16px;
+            color: var(--color-quintario);
+        }
+        .search::placeholder {
+            color: var(--color-quintario);
+        }
+        .search:focus {
+            outline: none;
+            background-color: var(--color-cuartario);
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .personaje {
+            width: 300px;
+            margin: 15px;
+            background-color: var(--color-secundario);
+            box-shadow: 0 5px 5px black;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        .personaje img {
+            width: 100%;
+        }
+        .personaje-info {
+            color: var(--color-quintario);
+            display: flex;
+            align-items: center;
+            font-family: italic;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 8px 15px 15px;
+            letter-spacing: 8px;
+        }
+        .personaje-info h3 {
+            color: var(--color-primario);
+            margin-top: 0;
+        }
+        .personaje-info span {
+            background-color: var(--color-primario);
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .personaje-info span.blue {
+            color: blue;
+        }
+        .personaje-info span.orange {
+            color: orange;
+        }
+        .personaje-info span.red {
+            color: rgb(0, 0, 0);
+        }
+        .overview {
+            background-color: var(--color-terciario);
+            padding: 32px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            max-height: 100%;
+            transform: translateY(101%);
+            overflow-y: auto;
+            transition: transform 1s ease-in;
+        }
+        .personaje:hover .overview {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="db.jpg" alt="logo" style="width: auto" height="50px">
+    <form id="form">
+        <input type="text" id="search" class="search" placeholder="Busca tu personaje">
+    </form>
+</header>
+<main id="main"></main>
+
+<script>
+    const API_URL = 'https://dragonball-api.com/api/characters';
+    const main = document.getElementById('main');
+    const form = document.getElementById('form');
+    const search = document.getElementById('search');
+
+    
+    getPersonajes(API_URL);
+
+    async function getPersonajes(url) {
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            showPersonajes(data.items || data); 
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    function showPersonajes(personajes) {
+        main.innerHTML = '';
+
+        personajes.forEach((personaje) => {
+            const { name, image, ki, description } = personaje; 
+            const personajeElements = document.createElement('div');
+            personajeElements.classList.add('personaje');
+            personajeElements.innerHTML = `
+                <img src="${image}" alt="${name}">
+                <div class="personaje-info">
+                    <h3>${name}</h3>
+                    <span class="${getClassByRate(ki)}">${ki}</span>
+                </div>
+                <div class="overview">
+                    <h3>Descripción</h3>
+                    <p>${description}</p>
+                </div>`;
+            main.appendChild(personajeElements);
+        });
+    }
+
+    function getClassByRate(ki) {
+        if (ki >= 8000) {
+            return 'blue';
+        } else if (ki >= 5000) {
+            return 'orange';
+        } else {
+            return 'red';
+        }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = search.value.toLowerCase();
+        if (searchTerm && searchTerm !== '') {
+            getPersonajes(`${API_URL}?name=${searchTerm}`);
+            search.value = '';
+        } else {
+            window.location.reload();
+        }
+    });
+</script>
+
+</body>
+</html>
